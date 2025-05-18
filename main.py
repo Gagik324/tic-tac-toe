@@ -1,3 +1,6 @@
+import os
+
+
 # Поля игры
 board = list(range(1, 10))
 
@@ -10,11 +13,14 @@ is_win = False
 # Условие побуды
 win_coords = (
     (0, 1, 2), (3, 4, 5), (6, 7, 8),
-    (0, 3, 6), (1, 4, 7), (2, 5, 8)
+    (0, 3, 6), (1, 4, 7), (2, 5, 8),
     (0, 4, 8), (2, 4, 6),
 )
 
 def draw_board():
+
+    os.system('cls')
+
     print('Игра Крестики-нолики:')
 
     for i in range(3):
@@ -34,18 +40,35 @@ while not is_win:
 
     player_answer = input(f'Куда ставим {player_token}?: ')
 
-    # Получаем индекс для хода
-    player_answer = int(player_answer) - 1
+    try:
+        # Получаем индекс для хода
+        player_answer = int(player_answer) - 1
+    except ValueError:
+        print("Введите число а не букву!")
+        input("Нажмите Enter")
+        continue
+
+
+    # Проверяем что индекс введён правильно
+    if player_answer > 8 or player_answer < 0:
+        print('Введите коректное число')
+        input('Нажмите Enter')
+        continue
+    
 
     # Проверяем, что ячейка свободна
     if board[player_answer] in ['X', 'O']:
         print('Ячейка уже занята')
+        input("Нажмите Enter")
         # Переходим к началу цикла
         continue
 
     # Делаем ход
     board[player_answer] = player_token
     counter += 1
+
+
+
 
     # Проверяем на выйгрыш
     for coords in win_coords:
